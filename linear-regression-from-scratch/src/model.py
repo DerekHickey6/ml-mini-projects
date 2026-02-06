@@ -1,16 +1,14 @@
-from re import X
-from tkinter import W
+from data.datasets import load_clean_LR_w_noise
 from math_utils import mse, compute_gradients
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-X_data = [2, 5.6, 7.8, 9.9, 10, 11]
-y_data = [3, 4.16, 7.28, 11.9, 12, 13.8]
-X_test = [x+2 for x in X_data]
+X_data, y_data = load_clean_LR_w_noise()
 
+X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.2)
 
 class LinearRegressionGD:
-    def __init__(self, lr=0.005, epochs=5000):
+    def __init__(self, lr=1e-4, epochs=5000):
         self.w_ = None
         self.b_ = None
         self.lr = lr
@@ -48,9 +46,9 @@ class LinearRegressionGD:
             self.b_ += dw_db_grads[1] * self.lr * -1
 
             ## Testing ##
-            # if epoch % 50 == 0:
-            #     print(f"Weight: {self.w_}, Bias: {self.b_}")
-            #     print(f"Loss: {loss}")
+            if epoch % 500 == 0:
+                print(f"Weight: {self.w_}, Bias: {self.b_}")
+                print(f"Loss: {loss}")
 
 
             # Store parameters as tuple ever other iteration
@@ -68,6 +66,6 @@ class LinearRegressionGD:
         return y_preds
 
 
-reg = LinearRegressionGD().fit(X_data, y_data)
-print(reg.predict(X_test))
+reg = LinearRegressionGD().fit(X_train, y_train)
+print(np.sort(reg.predict(X_test)))
 
