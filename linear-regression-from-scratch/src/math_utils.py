@@ -9,6 +9,9 @@ def mse(y_true, y_pred):
 
 # Compute gradients for weight and bias on given dataset
 def compute_gradients(X, y, w, b) -> tuple:
+    """
+    Returns: (dw, db)
+    """
     X = np.asarray(X)
     y = np.asarray(y)
 
