@@ -4,10 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
+# Load data
 X_data, y_data = load_clean_LR_w_noise()
-
 X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.2)
 
+# Linear Regression model wtih Gradient Descent
 class LinearRegressionGD:
     def __init__(self, lr=5e-5, epochs=1000):
         self.w_ = None
@@ -15,10 +16,11 @@ class LinearRegressionGD:
         self.lr = lr
         self.epochs = epochs
 
-        # Track loss
+        # Track loss and parameters for visualization
         self.loss_history_ = []
         self.param_history_ = []
 
+    # Training loop for given data
     def fit(self, X, y):
         X = np.asarray(X)
         y = np.asarray(y)
@@ -26,7 +28,6 @@ class LinearRegressionGD:
         # Initialize weight and bias
         self.w_ = 0
         self.b_ = 0
-
 
         # Clear loss in case fit is called twice
         self.loss_history_ = []
@@ -41,7 +42,7 @@ class LinearRegressionGD:
             # Add loss to history
             self.loss_history_.append(loss)
 
-            # Adjust weight and bias based on lr * grads
+            # Gradient Descent
             dw_db_grads = compute_gradients(X, y, self.w_, self.b_)
             self.w_ += dw_db_grads[0] * self.lr * -1
             self.b_ += dw_db_grads[1] * self.lr * -1
@@ -51,12 +52,12 @@ class LinearRegressionGD:
                 print(f"Weight: {self.w_}, Bias: {self.b_}")
                 print(f"Loss: {loss}")
 
-
             # Store parameters as tuple ever other iteration
             self.param_history_.append((self.w_, self.b_))
 
         return self
 
+    # Predict based on given data
     def predict(self, X):
         if not (self.b_ and self.w_):
             raise Exception("An error occured: Model not trained")

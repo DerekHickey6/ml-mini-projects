@@ -15,6 +15,7 @@ def compute_gradients(X, y, w, b) -> tuple:
     X = np.asarray(X)
     y = np.asarray(y)
 
+    # Gradients for descent
     db = 2*np.mean((X * w + b) - y)
     dw = 2*np.mean(X*((X * w + b) - y))
 
