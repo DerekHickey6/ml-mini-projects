@@ -1,6 +1,7 @@
 from data.datasets import load_clean_LR_w_noise
 from math_utils import mse, compute_gradients
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
 X_data, y_data = load_clean_LR_w_noise()
@@ -8,7 +9,7 @@ X_data, y_data = load_clean_LR_w_noise()
 X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.2)
 
 class LinearRegressionGD:
-    def __init__(self, lr=1e-4, epochs=5000):
+    def __init__(self, lr=5e-5, epochs=1000):
         self.w_ = None
         self.b_ = None
         self.lr = lr
@@ -46,14 +47,13 @@ class LinearRegressionGD:
             self.b_ += dw_db_grads[1] * self.lr * -1
 
             ## Testing ##
-            if epoch % 500 == 0:
+            if epoch % 10 == 0:
                 print(f"Weight: {self.w_}, Bias: {self.b_}")
                 print(f"Loss: {loss}")
 
 
             # Store parameters as tuple ever other iteration
-            if epoch % 2 == 0:
-                self.param_history_.append((self.w_, self.b_))
+            self.param_history_.append((self.w_, self.b_))
 
         return self
 
@@ -65,7 +65,7 @@ class LinearRegressionGD:
         y_preds = self.w_ * X + self.b_
         return y_preds
 
-
-reg = LinearRegressionGD().fit(X_train, y_train)
-print(np.sort(reg.predict(X_test)))
+## Test ##
+# reg = LinearRegressionGD().fit(X_train, y_train)
+# print(np.sort(reg.predict(X_test)))
 
