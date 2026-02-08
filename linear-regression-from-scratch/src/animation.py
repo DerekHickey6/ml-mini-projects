@@ -5,6 +5,7 @@ from data.datasets import load_clean_LR_w_noise
 
 # Load and fit data
 X, y = load_clean_LR_w_noise()
+
 reg = LinearRegressionGD(lr=1e-5, epochs=500)
 reg.fit(X, y)
 

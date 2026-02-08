@@ -6,11 +6,10 @@ from sklearn.model_selection import train_test_split
 
 # Load data
 X_data, y_data = load_clean_LR_w_noise()
-X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.2, random_state=42)
 
 # Fit data
-reg = LinearRegressionGD()
-reg.fit(X_train, y_train)
+reg = LinearRegressionGD(lr=3e-5, epochs=300)
+reg.fit(X_data, y_data)
 
 # Create plots for Log of loss
 fig, axes = plt.subplots(1, 3, figsize=(12, 5))

@@ -1,19 +1,14 @@
-from data.datasets import load_clean_LR_w_noise
 from math_utils import mse, compute_gradients
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-
-# Load data
-X_data, y_data = load_clean_LR_w_noise()
-X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.2)
 
 # Linear Regression model wtih Gradient Descent
 class LinearRegressionGD:
-    def __init__(self, lr=5e-5, epochs=1000):
+    def __init__(self, lr=5e-5, epochs=1000, eval_rate=100, eval=True):
         self.w_ = None
         self.b_ = None
         self.lr = lr
+        self.eval_rate = eval_rate
+        self.eval = eval
         self.epochs = epochs
 
         # Track loss and parameters for visualization
@@ -47,10 +42,11 @@ class LinearRegressionGD:
             self.w_ += dw_db_grads[0] * self.lr * -1
             self.b_ += dw_db_grads[1] * self.lr * -1
 
-            ## Testing ##
-            if epoch % 10 == 0:
-                print(f"Weight: {self.w_}, Bias: {self.b_}")
-                print(f"Loss: {loss}")
+            # Evaluation
+            if epoch % self.eval_rate == 0 and eval == True:
+                print(f"--- Evaluation at Epoch {epoch} ---")
+                print(f"Weight: {self.w_:0.2f} - Bias: {self.b_:0.2f} - Loss: {loss:0.2f}")
+                print()
 
             # Store parameters as tuple ever other iteration
             self.param_history_.append((self.w_, self.b_))
@@ -65,8 +61,4 @@ class LinearRegressionGD:
         X = np.asarray(X)
         y_preds = self.w_ * X + self.b_
         return y_preds
-
-## Test ##
-# reg = LinearRegressionGD().fit(X_train, y_train)
-# print(np.sort(reg.predict(X_test)))
 
