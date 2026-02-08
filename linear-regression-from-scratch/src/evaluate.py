@@ -36,4 +36,5 @@ eval = pd.DataFrame([[train_mse, test_mse], [train_rmse, test_rmse], [train_mae,
                     index=['MSE', 'RMSE','MAE','R^2'],
                     columns=["Train", "Test"])
 eval["Difference"] = eval["Train"] - eval["Test"]
+print("     --- Evaluation Metrics --- ")
 print(eval)
