@@ -22,6 +22,14 @@ def confusion_matrix(y_true, y_pred, n_classes):
     return conf_mat
 
 def accuracy_score(y_true, y_pred):
-    pass
+    # Checking Shape error
+    if y_true.shape != y_pred.shape:
+        raise ValueError(f"Shape mismatch: {y_true.shape} and {y_pred.shape} do not match")
+
+    # Count the matching pairs and divide by total
+    accuracy = np.sum([x == y for x, y in zip(y_true, y_pred)]) / len(y_true)
+
+    return accuracy
+
 
 
