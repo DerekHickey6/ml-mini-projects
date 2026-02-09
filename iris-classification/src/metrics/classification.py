@@ -71,6 +71,21 @@ def macro_recall(conf_mat):
 
     return accum_recall / length
 
-def f1(conf_mat):
-    pass
+def macro_f1(conf_mat):
+
+    accum_f1 = 0
+    length = len(conf_mat)
+
+    # Sum of all f1's
+    for i in range(length):
+        tp = conf_mat[i, i]
+        fn = np.sum(conf_mat[i, :]) - tp
+        fp = np.sum(conf_mat[:, i]) - tp
+
+        if (2 * tp + fp + fn) != 0:
+            accum_f1 += (2 * tp) / (2 * tp + fp + fn)
+        else:
+            accum_f1 += 0
+
+    return accum_f1 / length
 
