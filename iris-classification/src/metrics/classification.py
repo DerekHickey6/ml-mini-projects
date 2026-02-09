@@ -40,11 +40,12 @@ def macro_precision(conf_mat):
 
     accum_precisions = 0
     length = len(conf_mat)
+    col_sums = np.sum(conf_mat, axis=0)
 
     # Sum of all precisions
     for i in range(length):
         tp = conf_mat[i, i]
-        fp = np.sum(conf_mat[:, i]) - tp
+        fp = col_sums[i] - tp
 
         if (tp + fp) != 0:
             accum_precisions += tp / (tp + fp)
@@ -58,11 +59,12 @@ def macro_recall(conf_mat):
 
     accum_recall = 0
     length = len(conf_mat)
+    row_sums = np.sum(conf_mat, axis=1)
 
     # Sum of all recalls
     for i in range(length):
         tp = conf_mat[i, i]
-        fn = np.sum(conf_mat[i, :]) - tp
+        fn = row_sums[i] - tp
 
         if (tp + fn) != 0:
             accum_recall += tp / (tp + fn)
@@ -75,12 +77,14 @@ def macro_f1(conf_mat):
 
     accum_f1 = 0
     length = len(conf_mat)
+    row_sums = np.sum(conf_mat, axis=1)
+    col_sums = np.sum(conf_mat, axis=0)
 
     # Sum of all f1's
     for i in range(length):
         tp = conf_mat[i, i]
-        fn = np.sum(conf_mat[i, :]) - tp
-        fp = np.sum(conf_mat[:, i]) - tp
+        fn = row_sums[i] - tp
+        fp = col_sums[i] - tp
 
         if (2 * tp + fp + fn) != 0:
             accum_f1 += (2 * tp) / (2 * tp + fp + fn)
