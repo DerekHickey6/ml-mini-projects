@@ -9,6 +9,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from metrics.classification import confusion_matrix
 
 X, y = load_iris(return_X_y=True)
+data = load_iris()
 n_classes = len(set(y))
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 

@@ -20,8 +20,7 @@ X_test_scaled = scaler.transform(X_test)
 clf = KNNClassifier().fit(X_train_scaled, y_train)
 y_pred = clf.predict(X_test_scaled)
 
-conf = confusion_matrix(y_test, y_pred, n_classes=n_classes)
-print(conf)
+print(y_pred)
 
 
 
