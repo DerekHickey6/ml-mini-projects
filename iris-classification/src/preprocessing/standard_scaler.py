@@ -1,5 +1,6 @@
 import numpy as np
 
+# Used to scale data for appropriate training in KNNClassifier
 class StandardScaler:
     def __init__(self):
         self.mean_ = None
@@ -24,7 +25,6 @@ class StandardScaler:
 
         # Handles zero-variance cases to avoid div by 0
         self.std_[self.std_ == 0] = 1
-
 
         return self
 
