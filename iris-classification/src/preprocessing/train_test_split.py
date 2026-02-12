@@ -1,9 +1,20 @@
 import numpy as np
 
 def train_test_split(X, y, test_size=0.2, shuffle=False, random_seed=1):
+    # Enforces array shape
+    if X.shape[0] < 1 or X.shape[1] < 1:
+        raise ValueError("Shape mismatch: Array must have at least 1 row and 1 column")
+
+    # ensures X is 2D array
+    if X.ndim != 2:
+        raise ValueError("Shape mismatch: X must be shape (N, D)")
+
+    if len(X) != len(y):
+        raise ValueError("X data and y data must be the same length")
+
     # Calculate split index
     length = len(X)
-    split_index = length * test_size
+    split_index = int(length * (1 - test_size))
 
     X = np.array(X)
     y = np.array(y)
@@ -14,14 +25,12 @@ def train_test_split(X, y, test_size=0.2, shuffle=False, random_seed=1):
         np.random.shuffle(X)
         np.random.shuffle(y)
 
-    # Split the dataa
+    # Split the data
     X_train = X[:split_index]
     X_test = X[split_index:]
 
     y_train = y[:split_index]
     y_test = y[split_index:]
-
-
 
     return X_train, X_test, y_train, y_test
 
