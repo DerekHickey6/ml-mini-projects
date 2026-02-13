@@ -34,15 +34,17 @@ def train_test_split(X, y, test_size=0.2, shuffle=False, random_seed=1):
         class_idx = np.where(y == i)
         class_split_index = int(len(class_idx[0]) * (1 - test_size))
 
-        X_train += X[class_idx][:class_split_index]
-        y_train += y[class_idx][:class_split_index]
-        X_test += X[class_idx][class_split_index:]
-        y_test += y[class_idx][class_split_index:]
+        # Create list of split indivuidual class arrays
+        X_train.append(X[class_idx][:class_split_index])
+        y_train.append(y[class_idx][:class_split_index])
+        X_test.append(X[class_idx][class_split_index:])
+        y_test.append(y[class_idx][class_split_index:])
 
-    X_train = np.array(X_train)
-    y_train = np.array(y_train)
-    X_test = np.array(X_test)
-    y_test = np.array(y_test)
+    # Concatenate all arrays into splits
+    X_train = np.concatenate(X_train)
+    y_train = np.concatenate(y_train)
+    X_test = np.concatenate(X_test)
+    y_test = np.concatenate(y_test)
 
     # Shuffle Data
     if shuffle:
