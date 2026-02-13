@@ -3,6 +3,11 @@ import numpy as np
 def train_test_split(X, y, test_size=0.2, shuffle=False, random_seed=1):
     X = np.array(X)
     y = np.array(y)
+    X_train = []
+    X_test = []
+    y_train = []
+    y_test = []
+
 
     # Ensure test_size is valid
     if test_size > 1 or test_size < 0:
@@ -22,27 +27,42 @@ def train_test_split(X, y, test_size=0.2, shuffle=False, random_seed=1):
     if len(X) != len(y):
         raise ValueError("X data and y data must be the same length")
 
-    # Calculate split index
-    length = len(X)
-    split_index = int(length * (1 - test_size))
+    classes = np.unique(y)
+
+    # Separates data on index of label and splits on test_split, concatenate on appropriate list
+    for i in classes:
+        class_idx = np.where(y == i)
+        class_split_index = int(len(class_idx[0]) * (1 - test_size))
+
+        X_train += X[class_idx][:class_split_index]
+        y_train += y[class_idx][:class_split_index]
+        X_test += X[class_idx][class_split_index:]
+        y_test += y[class_idx][class_split_index:]
+
+    X_train = np.array(X_train)
+    y_train = np.array(y_train)
+    X_test = np.array(X_test)
+    y_test = np.array(y_test)
 
     # Shuffle Data
     if shuffle:
         np.random.seed(random_seed)
 
-        idxs = list(range(length))
-        np.random.shuffle(idxs)
+        idxs_train = list(range(len(X_train)))
+        idxs_test = list(range(len(X_test)))
 
-        X = X[idxs]
-        y = y[idxs]
+        np.random.shuffle(idxs_train)
 
-    # Split the data
-    X_train = X[:split_index]
-    X_test = X[split_index:]
+        X_train = X_train[idxs_train]
+        y_train = y_train[idxs_train]
+        X_test = X_test[idxs_test]
+        y_test = y_test[idxs_test]
 
-    y_train = y[:split_index]
-    y_test = y[split_index:]
 
     return X_train, X_test, y_train, y_test
+
+
+
+
 
 
