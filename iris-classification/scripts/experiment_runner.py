@@ -28,6 +28,26 @@ knn_clf = KNNClassifier().fit(X_train_scaled, y_train)
 y_pred_maj = maj_clf.predict(X_test_scaled)
 y_pred_knn = knn_clf.predict(X_test_scaled)
 
+maj_conf_mat = confusion_matrix(y_test, y_pred_maj, n_classes)
+knn_conf_mat = confusion_matrix(y_test, y_pred_knn, n_classes)
+
+# Create model + metrics dictionarys for modular metric processing and display
+model_preds = {"baseline": y_pred_maj, "knn": y_pred_knn}
+metrics_df = pd.DataFrame()
+
+# Calculate metrics
+for i in model_preds:
+    metrics = {}
+
+    conf_mat = confusion_matrix(y_test, model_preds[i], n_classes)
+    metrics['Accuracy'] = accuracy_score(y_test, model_preds[i])
+    metrics['macro precision'] = macro_precision(conf_mat)
+    metrics['macro recall'] = macro_recall(conf_mat)
+    metrics['macro f1'] = macro_f1(conf_mat)
+
+    metrics_df[i] = pd.Series(metrics)
+
+
 
 
 ## Printing results ##
@@ -37,9 +57,10 @@ print(" #   Comparison Metrics   #")
 print(" ##########################")
 print()
 print(" -- Baseline Confusion Matrix --")
-print(confusion_matrix(y_test, y_pred_maj, n_classes))
+print(maj_conf_mat)
 print()
 print(" -- KNN Confusion Matrix -- ")
-print(confusion_matrix(y_test, y_pred_knn, n_classes))
-
+print(knn_conf_mat)
+print()
+print(metrics_df)
 
