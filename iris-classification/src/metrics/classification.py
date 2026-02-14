@@ -28,11 +28,11 @@ def accuracy_score(y_true, y_pred):
 
 
     # Test for empty input
-    if not (y_true and y_pred):
+    if len(y_true) == 0 or len(y_pred) == 0:
         raise ValueError("Input must be non-empty")
 
     # Count the matching pairs and divide by total
-    accuracy = np.sum([x == y for x, y in zip(y_true, y_pred)]) / len(y_true)
+    accuracy = np.sum(y_true == y_pred) / len(y_true)
 
     return accuracy
 

@@ -21,7 +21,7 @@ class MajorityClassClassifier:
 
     # Return np.array with shape (len(X),) and filled with highest freq label
     def predict(self, X):
-        if self.max_freq_label == None:
+        if self.max_freq_label is None:
             raise RuntimeError("Must call fit() before predict()")
 
         return np.full((len(X),), self.max_freq_label, dtype=int)
