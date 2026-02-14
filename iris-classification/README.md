@@ -20,13 +20,17 @@ The classifier predicts flower species by finding the `k` closest training sampl
 
 The [Iris dataset](https://scikit-learn.org/stable/datasets/toy_dataset.html#iris-dataset) contains 150 samples across 3 classes (Setosa, Versicolor, Virginica), each with 4 features: sepal length, sepal width, petal length, and petal width. Classes are balanced at 50 samples each.
 
-## Why Scaling Matters
+## Why Scale?
 
 KNN relies on Euclidean distance, so features with larger ranges dominate the distance calculation. Standard scaling normalizes each feature to zero mean and unit variance, ensuring all features contribute equally. The scaler is fit on training data only — fitting on the full dataset would leak test set statistics into the model.
 
+## Stratified Splitting
+
+The train/test split is stratified — each class is split independently so that both sets preserve the original class distribution. This prevents one class from being underrepresented (or absent) in either set, which is critical for reliable evaluation.
+
 ## Metric Choice
 
-Accuracy alone is misleading when compared against a baseline that always predicts the majority class (33% on a balanced 3-class problem). Macro-averaged precision, recall, and F1 evaluate performance **per class** and average equally, ensuring no class is ignored.
+All metrics are derived from a confusion matrix, which tracks per-class true positives, false positives, and false negatives. Accuracy alone is misleading when compared against a baseline that always predicts the majority class (33% on a balanced 3-class problem). Macro-averaged precision, recall, and F1 evaluate performance per class and average equally, ensuring no class is ignored.
 
 ## Results
 
