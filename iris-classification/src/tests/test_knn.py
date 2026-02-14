@@ -32,4 +32,34 @@ y_preds = clf.predict(X_test)
 print(" -- Tie-break test --")
 print(f"True: {y_test}")
 print(f"Pred: {y_preds}")
+print()
 
+print(" -- Individual Tests -- ")
+## Test predict_before_fit ##
+
+clf = KNNClassifier()
+
+try:
+    clf.predict(X_train)
+    print("Predict-before-fit Test Failed")
+
+except RuntimeError:
+    print("Predict-before-fit Test Passed")
+
+## Test invalid K_val ##
+
+try:
+    clf = KNNClassifier(-1)
+    print("invalid K_val Test Failed")
+
+except ValueError:
+    print("invalid K_val Test Passed")
+
+## Test k_val larger than dataset ##
+
+try:
+    clf = KNNClassifier(7).fit(X_train, y_train)     # X_train length = 4
+    print("larger k_val test failed")
+
+except ValueError:
+    print("larger K_val test passed")
