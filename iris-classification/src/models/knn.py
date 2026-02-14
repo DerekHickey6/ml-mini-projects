@@ -3,7 +3,7 @@ import numpy as np
 from collections import Counter
 
 class KNNClassifier:
-    def __init__(self, k_val: int=5):
+    def __init__(self, k_val: int=3):
         if k_val < 1:
             raise ValueError(f"K_val must be positive integer. Got {k_val}")
 
