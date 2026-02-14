@@ -1,6 +1,18 @@
 import numpy as np
 
-def train_test_split(X, y, test_size=0.2, shuffle=False, random_seed=1):
+def train_test_split(X, y, test_size=0.2, shuffle=True, random_seed=1):
+    """_summary_
+
+    Args:
+        X (np.array): Feature data
+        y (np.array): labels/target
+        test_size (float, optional): size of test data on split. Defaults to 0.2.
+        shuffle (bool, optional): shuffles data. Defaults to True.
+        random_seed (int, optional): sets random seed in shuffle. Defaults to 1.
+
+    Returns:
+        np.array, np.array, np.array, np.array: X_train, X_test, y_train, y_test
+    """
     X = np.array(X)
     y = np.array(y)
     X_train = []
