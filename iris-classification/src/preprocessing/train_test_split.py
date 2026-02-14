@@ -48,12 +48,11 @@ def train_test_split(X, y, test_size=0.2, shuffle=False, random_seed=1):
 
     # Shuffle Data
     if shuffle:
-        np.random.seed(random_seed)
+        rng = np.random.default_rng(random_seed)
 
-        idxs_train = list(range(len(X_train)))
-        idxs_test = list(range(len(X_test)))
-
-        np.random.shuffle(idxs_train)
+        # Create shuffles indices
+        idxs_train = rng.permutation(len(X_train))
+        idxs_test = rng.permutation(len(X_test))
 
         X_train = X_train[idxs_train]
         y_train = y_train[idxs_train]
