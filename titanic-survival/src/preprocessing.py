@@ -25,7 +25,6 @@ def handle_missing_values(df):
 def feature_eng(df):
     # Create Family size feature
     df['FamilySize'] = df['Parch'] + df['SibSp'] + 1
-    df.drop(['Parch', 'SibSp'], axis=1, inplace=True)
 
     # Create Is Alone feature
     df['Is Alone'] = (df['FamilySize'] == 1).astype(int)
@@ -35,6 +34,15 @@ def feature_eng(df):
 
     # Create title bin
     df['Title'] = df['Name'].str.split().str[1].str.replace('.', '').str.strip()
+
+    # Labels rare titles as other
+    df.loc[~df['Title'].isin(['Mr', 'Mrs', 'Miss', 'Master']), 'Title'] = 'Other'
+
+    # Drop unneeded columns
+    df.drop(['Parch', 'SibSp', 'Name', 'Age'], axis=1, inplace=True)
+
+    return df
+
 
 
 
