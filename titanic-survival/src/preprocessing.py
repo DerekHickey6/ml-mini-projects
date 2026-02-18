@@ -43,6 +43,8 @@ def feature_eng(df):
 
     return df
 
+def encode_categorical(df):
+    pass
 
 
 
