@@ -52,6 +52,10 @@ def encode_categorical(df):
                           dtype=int,
                           drop_first=True)
 
+# Convenience method to call preprocessing steps
+def clean_df(df):
+    return encode_categorical(feature_eng(handle_missing_values(df)))
+
 
 if __name__ == '__main__':
     df = pd.read_csv("data/train.csv")
