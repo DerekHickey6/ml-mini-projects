@@ -10,7 +10,7 @@ def handle_missing_values(df):
         # Binarizes columns with large amounts of missing data
         if null_prop > 0.3:
             df[f'Has{column}'] = df[column].notnull().astype(int)
-            df.drop(column, inplace=True)
+            df.drop(column, axis=1, inplace=True)
 
         # Fill very small missing data with mode
         elif null_prop < 0.05:
@@ -39,18 +39,23 @@ def feature_eng(df):
     df.loc[~df['Title'].isin(['Mr', 'Mrs', 'Miss', 'Master']), 'Title'] = 'Other'
 
     # Drop unneeded columns
-    df.drop(['Parch', 'SibSp', 'Name', 'Age'], axis=1, inplace=True)
+    df.drop(['Parch', 'SibSp', 'Name', 'Age', 'PassengerId', 'Ticket'], axis=1, inplace=True)
 
     return df
 
+# One-hot encode remaining attributes
 def encode_categorical(df):
-    pass
 
-
-
-
+    return pd.get_dummies(df,
+                          columns=['Sex', 'Embarked', 'LifeStage', 'Title'],
+                          prefix=['Sex', 'Embarked', 'LifeStage', 'Title'],
+                          dtype=int,
+                          drop_first=True)
 
 
 if __name__ == '__main__':
     df = pd.read_csv("data/train.csv")
-    handle_missing_values(df)
+    df = handle_missing_values(df)
+    df = feature_eng(df)
+    df = encode_categorical(df)
+    print(df)
