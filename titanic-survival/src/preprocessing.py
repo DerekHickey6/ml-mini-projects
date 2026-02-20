@@ -27,13 +27,13 @@ def feature_eng(df):
     df['FamilySize'] = df['Parch'] + df['SibSp'] + 1
 
     # Create Is Alone feature
-    df['Is Alone'] = (df['FamilySize'] == 1).astype(int)
+    df['IsAlone'] = (df['FamilySize'] == 1).astype(int)
 
     # Create age-bins
-    df['Life Stage'] = pd.cut(df['Age'], bins=[-1, 10, 30, 60, 100], labels=['Child', 'Young Adult', 'Middle-Aged', 'Senior'])
+    df['LifeStage'] = pd.cut(df['Age'], bins=[-1, 10, 30, 60, 100], labels=['Child', 'Young Adult', 'Middle-Aged', 'Senior'])
 
     # Create title bin
-    df['Title'] = df['Name'].str.split().str[1].str.replace('.', '').str.strip()
+    df['Title'] = df['Name'].str.extract(r'\,\s*(\w+)\.')
 
     # Labels rare titles as other
     df.loc[~df['Title'].isin(['Mr', 'Mrs', 'Miss', 'Master']), 'Title'] = 'Other'
@@ -51,6 +51,6 @@ def encode_categorical(df):
 
 
 
-
-df = pd.read_csv("data/train.csv")
-handle_missing_values(df)
+if __name__ == '__main__':
+    df = pd.read_csv("data/train.csv")
+    handle_missing_values(df)
