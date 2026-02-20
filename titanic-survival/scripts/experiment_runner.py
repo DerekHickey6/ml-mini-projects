@@ -13,6 +13,7 @@ targets_df = df['Survived'].copy()
 features_df = clean_df(df)
 features_df.drop('Survived', axis=1, inplace=True)
 
+
 X_train, X_test, y_train, y_test = train_test_split(features_df, targets_df, test_size=0.2)
 
 scaler = StandardScaler()
@@ -23,12 +24,32 @@ logreg = LogisticRegression().fit(X_train_scaled, y_train)
 
 y_preds = logreg.predict(X_test_scaled)
 
-print(f"Accuracy:  {accuracy_score(y_test, y_preds):0.3f}")
-print(f"F1 Score:  {f1_score(y_test, y_preds):0.3f}")
-print(f"Recall:    {recall_score(y_test, y_preds):0.3f}")
-print(f"Precision: {precision_score(y_test, y_preds):0.3f}")
+# Create model + metrics dictionarys for modular metric processing and display
+model_preds = {"logisticRegression": y_preds}
+metrics_df = pd.DataFrame()
 
-print(f"--- Confusion Matrix ---")
-print(confusion_matrix(y_test, y_preds))
+# Calculate metrics
+for i in model_preds:
+    metrics = {}
 
+    metrics['Accuracy'] = accuracy_score(y_test, model_preds[i])
+    metrics['Precision'] = precision_score(y_test, model_preds[i])
+    metrics['Recall'] = recall_score(y_test, model_preds[i])
+    metrics['F1'] = f1_score(y_test, model_preds[i])
+    metrics['ROC AUC'] = roc_auc_score(y_test, model_preds[i])
+
+    metrics_df[i] = pd.Series(metrics)
+
+logreg_conf_mat = confusion_matrix(y_test, y_preds)
+
+## Printing results ##
+
+print(" ##########################")
+print(" #   Comparison Metrics   #")
+print(" ##########################")
+print()
+print("Logistic Regression Confusion Matrix")
+print(logreg_conf_mat)
+print()
+print(metrics_df)
 
