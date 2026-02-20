@@ -22,21 +22,24 @@ X_test_scaled = scaler.transform(X_test)
 
 logreg = LogisticRegression().fit(X_train_scaled, y_train)
 
-y_preds = logreg.predict(X_test_scaled)
-
 # Create model + metrics dictionarys for modular metric processing and display
-model_preds = {"logisticRegression": y_preds}
+models = {"logisticRegression": logreg}
 metrics_df = pd.DataFrame()
 
 # Calculate metrics
-for i in model_preds:
+for i in models:
     metrics = {}
 
-    metrics['Accuracy'] = accuracy_score(y_test, model_preds[i])
-    metrics['Precision'] = precision_score(y_test, model_preds[i])
-    metrics['Recall'] = recall_score(y_test, model_preds[i])
-    metrics['F1'] = f1_score(y_test, model_preds[i])
-    metrics['ROC AUC'] = roc_auc_score(y_test, model_preds[i])
+    y_preds = models[i].predict(X_test_scaled)
+    y_proba = models[i].predict_proba(X_test_scaled)[:, 1]
+
+    metrics['Accuracy'] = accuracy_score(y_test, y_preds)
+    metrics['Precision'] = precision_score(y_test, y_preds)
+    metrics['Recall'] = recall_score(y_test, y_preds)
+    metrics['F1'] = f1_score(y_test, y_preds)
+
+    # Passes predition scores to
+    metrics['ROC AUC'] = roc_auc_score(y_test, y_proba)
 
     metrics_df[i] = pd.Series(metrics)
 
