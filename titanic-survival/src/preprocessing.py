@@ -14,11 +14,11 @@ def handle_missing_values(df):
 
         # Fill very small missing data with mode
         elif null_prop < 0.05:
-            df[column].fillna(df[column].mode()[0], inplace=True)
+            df[column] = df[column].fillna(df[column].mode()[0])
 
         # Else fill missing values with median
         elif null_prop < 0.3 and null_prop > 0.05 and pd.api.types.is_numeric_dtype(df[column]):
-            df[column].fillna(df[column].median(), inplace=True)
+            df[column] = df[column].fillna(df[column].median())
 
     return df
 
