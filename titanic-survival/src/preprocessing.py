@@ -1,5 +1,6 @@
 import pandas as pd
 
+# Handles missing values in the dataset by either binarizing, filling with mode, or filling with median based on the proportion of missing data
 def handle_missing_values(df):
     for column in df.columns:
         null_prop = df[column].isnull().sum() / len(df)
@@ -56,7 +57,7 @@ def encode_categorical(df):
 def clean_df(df):
     return encode_categorical(feature_eng(handle_missing_values(df)))
 
-
+# Example usage
 if __name__ == '__main__':
     df = pd.read_csv("data/train.csv")
     df = handle_missing_values(df)

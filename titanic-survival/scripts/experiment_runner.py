@@ -1,3 +1,5 @@
+# This script is responsible for running the experiments, training the models, and calculating the metrics for comparison.
+
 import pandas as pd
 
 from src.preprocessing import clean_df
@@ -10,6 +12,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 
 import matplotlib.pyplot as plt
 
+# Dictionary to store models and metrics for comparison
 models = {}
 metrics_df = pd.DataFrame()
 conf_mats = {}
@@ -17,13 +20,15 @@ conf_mats = {}
 # Load Data
 df = pd.read_csv("data/train.csv")
 
+# Separate features and targets
 targets_df = df['Survived'].copy()
 features_df = clean_df(df)
 features_df.drop('Survived', axis=1, inplace=True)
 
-
+# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(features_df, targets_df, test_size=0.2)
 
+# Scale features for better performance of certain models
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
@@ -36,10 +41,10 @@ models['LogisticRegression'] = logreg
 randtree = RandomForestClassifier().fit(X_train_scaled, y_train)
 models['RandomForestClassifier'] = randtree
 
-
+# Stratified K-Fold cross-validation for better performance evaluation
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=1)
 
-# Calculate metrics
+# Calculate metrics for each model and store in metrics_df for comparison, also store confusion matrices for display
 for i in models:
     metrics = {}
 
@@ -83,6 +88,7 @@ feature_names = X_train.columns
 logreg_importances = models['LogisticRegression'].coef_[0]
 rf_importances = models['RandomForestClassifier'].feature_importances_
 
+# Plotting side by side for better comparison
 plt.subplot(1, 2, 1)
 plt.barh(feature_names, logreg_importances, label='LogisticRegression')
 plt.title('Logistic Regression Coef')
