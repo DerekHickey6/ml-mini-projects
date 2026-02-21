@@ -3,8 +3,13 @@ import pandas as pd
 from src.preprocessing import clean_df
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_auc_score
+
+models = {}
+metrics_df = pd.DataFrame()
+conf_mats = {}
 
 # Load Data
 df = pd.read_csv("data/train.csv")
@@ -20,11 +25,13 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-logreg = LogisticRegression().fit(X_train_scaled, y_train)
-
 # Create model + metrics dictionarys for modular metric processing and display
-models = {"logisticRegression": logreg}
-metrics_df = pd.DataFrame()
+logreg = LogisticRegression().fit(X_train_scaled, y_train)
+models['LogisticRegression'] = logreg
+
+randtree = RandomForestClassifier().fit(X_train_scaled, y_train)
+models['RandomForestClassifier'] = randtree
+
 
 # Calculate metrics
 for i in models:
@@ -38,12 +45,11 @@ for i in models:
     metrics['Recall'] = recall_score(y_test, y_preds)
     metrics['F1'] = f1_score(y_test, y_preds)
 
-    # Passes predition scores to
+    # Passes prediction scores to roc_auc for better output
     metrics['ROC AUC'] = roc_auc_score(y_test, y_proba)
 
+    conf_mats[i] = confusion_matrix(y_test, y_preds)
     metrics_df[i] = pd.Series(metrics)
-
-logreg_conf_mat = confusion_matrix(y_test, y_preds)
 
 ## Printing results ##
 
@@ -52,7 +58,9 @@ print(" #   Comparison Metrics   #")
 print(" ##########################")
 print()
 print("Logistic Regression Confusion Matrix")
-print(logreg_conf_mat)
+print(conf_mats['LogisticRegression'])
+print("Random Forest Confusion Matrix")
+print(conf_mats['RandomForestClassifier'])
 print()
 print(metrics_df)
 
