@@ -53,13 +53,15 @@ for i in models:
     metrics['ROC AUC'] = roc_auc_score(y_test, y_proba)
 
     # Pipeline
-    pipeline = Pipeline([('transformer', scaler), ('classifier', logreg)])
+    pipeline = Pipeline([('transformer', scaler), ('classifier', models[i])])
+
+    ## Cross-validation ##
+    metrics['CV Score'] = cross_val_score(pipeline, features_df, targets_df, cv=cv, scoring='accuracy')
 
     conf_mats[i] = confusion_matrix(y_test, y_preds)
     metrics_df[i] = pd.Series(metrics)
 
-## Cross-validation ##
-cv_score = cross_val_score(pipeline, features_df, targets_df, cv=cv, scoring='accuracy')
+
 
 ## Printing results ##
 
