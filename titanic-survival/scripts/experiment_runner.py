@@ -1,7 +1,8 @@
 import pandas as pd
 
 from src.preprocessing import clean_df
-from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
@@ -25,6 +26,7 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
+
 # Create model + metrics dictionarys for modular metric processing and display
 logreg = LogisticRegression().fit(X_train_scaled, y_train)
 models['LogisticRegression'] = logreg
@@ -32,6 +34,8 @@ models['LogisticRegression'] = logreg
 randtree = RandomForestClassifier().fit(X_train_scaled, y_train)
 models['RandomForestClassifier'] = randtree
 
+
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=1)
 
 # Calculate metrics
 for i in models:
@@ -48,8 +52,14 @@ for i in models:
     # Passes prediction scores to roc_auc for better output
     metrics['ROC AUC'] = roc_auc_score(y_test, y_proba)
 
+    # Pipeline
+    pipeline = Pipeline([('transformer', scaler), ('classifier', logreg)])
+
     conf_mats[i] = confusion_matrix(y_test, y_preds)
     metrics_df[i] = pd.Series(metrics)
+
+## Cross-validation ##
+cv_score = cross_val_score(pipeline, features_df, targets_df, cv=cv, scoring='accuracy')
 
 ## Printing results ##
 
@@ -57,10 +67,10 @@ print(" ##########################")
 print(" #   Comparison Metrics   #")
 print(" ##########################")
 print()
-print("Logistic Regression Confusion Matrix")
-print(conf_mats['LogisticRegression'])
-print("Random Forest Confusion Matrix")
-print(conf_mats['RandomForestClassifier'])
-print()
+for i in conf_mats:
+    print(f"{i} Confusion Matrix")
+    print(conf_mats[i])
+    print()
 print(metrics_df)
+
 
