@@ -8,6 +8,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_auc_score
 
+import matplotlib.pyplot as plt
+
 models = {}
 metrics_df = pd.DataFrame()
 conf_mats = {}
@@ -56,11 +58,10 @@ for i in models:
     pipeline = Pipeline([('transformer', scaler), ('classifier', models[i])])
 
     ## Cross-validation ##
-    metrics['CV Score'] = cross_val_score(pipeline, features_df, targets_df, cv=cv, scoring='accuracy')
+    metrics['Mean CV Score'] = cross_val_score(pipeline, features_df, targets_df, cv=cv, scoring='accuracy').mean()
 
     conf_mats[i] = confusion_matrix(y_test, y_preds)
     metrics_df[i] = pd.Series(metrics)
-
 
 
 ## Printing results ##
@@ -76,3 +77,24 @@ for i in conf_mats:
 print(metrics_df)
 
 
+
+## Plot Feature importance & Log-Reg Coefficients##
+feature_names = X_train.columns
+logreg_importances = models['LogisticRegression'].coef_[0]
+rf_importances = models['RandomForestClassifier'].feature_importances_
+
+plt.subplot(1, 2, 1)
+plt.barh(feature_names, logreg_importances, label='LogisticRegression')
+plt.title('Logistic Regression Coef')
+plt.ylabel('Feature')
+
+ax = plt.subplot(1, 2, 2)
+plt.barh(feature_names, rf_importances, label='RandomForest')
+plt.title('RF Feature Importance')
+plt.xlabel('Feature Importance')
+plt.ylabel('Feature')
+ax.set_yticks([])
+
+plt.tight_layout()
+plt.savefig('feature_importance.png')
+plt.show()
