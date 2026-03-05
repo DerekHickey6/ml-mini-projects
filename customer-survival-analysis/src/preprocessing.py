@@ -15,3 +15,12 @@ def encode_binary_columns(df):
 # One-hot encode multi-category columns
 # multipleLines, InternetService, onlinesecurity, onlineBackup, deviceprotection, techsupport, streamingTV, StreamingMovies, Contract, PaymentMethod
 def encode_categorical_columns(df):
+    df = pd.get_dummies(df, drop_first=True)
+
+    return df
+
+# Convenience method to call both on a dataframe
+def encode_columns(df):
+    df = encode_categorical_columns(encode_binary_columns(df))
+
+    return df
