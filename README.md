@@ -1,28 +1,28 @@
 # Machine Learning Mini Projects
 
-This repository contains a collection of small, complete machine learning projects
-designed to demonstrate understanding of core ML concepts, algorithms, and workflows.
+A collection of end-to-end machine learning projects covering core ML concepts, algorithms, and workflows — from algorithms built from scratch to applied models on real datasets.
 
-Each project is intentionally scoped to focus on a specific idea, from foundational algorithms
-implemented from scratch to applied models using real datasets.
+## Projects
 
-## Purpose
-
-This repository exists to:
-- Reinforce machine learning fundamentals through implementation
-- Demonstrate end-to-end ML workflows on small, focused problems
-- Combine theory and practice through experimentation
-- Build a strong foundation for larger ML and AI systems
+| # | Project | Description | Key Skills |
+|---|---------|-------------|------------|
+| 1 | [Linear Regression from Scratch](./linear-regression-from-scratch/) | Gradient descent, MSE loss, manual weight updates | NumPy, calculus |
+| 2 | [Iris Classification (KNN)](./iris-classification/) | K-Nearest Neighbors built from scratch | Distance metrics, decision boundaries |
+| 3 | [Titanic Survival Prediction](./titanic-survival-prediction/) | Binary classification with feature engineering | scikit-learn, preprocessing |
+| 4 | [EDA Portfolio](./eda-portfolio/) | Exploratory analysis on Spotify tracks dataset | Pandas, Matplotlib, Seaborn |
+| 5 | [Customer Survival Analysis](./customer-survival-analysis/) | Kaplan-Meier + Cox PH model on telecom churn data | lifelines, censored data, hazard ratios |
+| 6 | [Sentiment Analysis](./sentiment-analysis/) | TF-IDF + Logistic Regression / LinearSVC vs. DistilBERT zero-shot | NLP, Hugging Face, transformers |
 
 ## Tools & Technologies
 
 - Python
 - NumPy, Pandas
 - scikit-learn
-- PyTorch
 - Matplotlib / Seaborn
+- lifelines
+- Hugging Face Transformers
 - Jupyter Notebooks
 
-## Notes
+## Next
 
-These projects are designed to be readable and educational, not optimized for production.
+LLM engineering projects (CLI agents, RAG, FastAPI, Docker, LangChain) live in [llm-engineering](https://github.com/DerekHickey6/llm-engineering).
